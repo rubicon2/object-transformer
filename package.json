@@ -34,5 +34,8 @@
     "globals": "^16.4.0",
     "prettier": "^3.6.2",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "value-from-nested-obj": "^1.0.0"
   }
 }
