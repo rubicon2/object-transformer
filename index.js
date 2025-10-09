@@ -1,4 +1,2 @@
-import transformer from './lib/object-transformer.mjs';
-import * as rules from './lib/rules.mjs';
-
-export { transformer, rules };
+export { default } from './lib/object-transformer.mjs';
+export * from './lib/rules.mjs';
