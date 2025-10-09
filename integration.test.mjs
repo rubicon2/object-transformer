@@ -105,5 +105,67 @@ describe('object-transformer', () => {
         },
       });
     });
+
+    it.each([
+      {
+        testType: 'flat input key and flat output key',
+        rules: {
+          'my.flat.key': copy({ destinationKey: 'some.different.flat.key' }),
+        },
+        options: { pathSeparator: null },
+        input: {
+          'my.flat.key': 'my flat value',
+        },
+        expectedOutput: {
+          'some.different.flat.key': 'my flat value',
+        },
+      },
+      {
+        testType: 'flat input key and nested output',
+        rules: {
+          'my.flat.key': copy({
+            destinationKey: 'my.nested.key',
+            options: { pathSeparator: '.' },
+          }),
+        },
+        options: { pathSeparator: null },
+        input: {
+          'my.flat.key': 'my originally flat value',
+        },
+        expectedOutput: {
+          my: {
+            nested: {
+              key: 'my originally flat value',
+            },
+          },
+        },
+      },
+      {
+        testType: 'nested input key and flat output',
+        rules: {
+          'my.nested.key': copy({
+            destinationKey: 'my.flat.key',
+            options: { pathSeparator: null },
+          }),
+        },
+        options: { pathSeparator: '.' },
+        input: {
+          my: {
+            nested: {
+              key: 'my originally nested value',
+            },
+          },
+        },
+        expectedOutput: {
+          'my.flat.key': 'my originally nested value',
+        },
+      },
+    ])(
+      'with $testType, produces the correct results',
+      ({ rules, options, input, expectedOutput }) => {
+        const t = transformer(rules, options);
+        expect(t(input)).toStrictEqual(expectedOutput);
+      },
+    );
   });
 });
