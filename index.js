@@ -1,3 +1,3 @@
-import transformer from './lib/object-transformer.mjs';
-
-export { transformer };
+export { default } from './lib/object-transformer.mjs';
+export * from './lib/rules.mjs';
+export * from './lib/parsers.mjs';
