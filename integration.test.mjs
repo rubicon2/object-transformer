@@ -1,4 +1,4 @@
-import transformer, { copy } from './index';
+import transformer, { copy, parseDate } from './index';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 let outputObj;
@@ -80,7 +80,7 @@ describe('object-transformer', () => {
         age: copy({ destinationKey: 'data.age', parser: parseInt }),
         dob: copy({
           destinationKey: 'data.dob',
-          parser: (v) => new Date(v),
+          parser: parseDate,
         }),
       };
 
