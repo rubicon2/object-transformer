@@ -107,7 +107,7 @@ describe('object-transformer', () => {
 
   it.each([
     {
-      testType: 'flat input key and flat output key',
+      testType: 'flat input key and flat destination key',
       rules: {
         'my.flat.key': copy({ destinationKey: 'some.different.flat.key' }),
       },
@@ -123,7 +123,7 @@ describe('object-transformer', () => {
       },
     },
     {
-      testType: 'flat input key and nested output key',
+      testType: 'flat input key and nested destination key',
       rules: {
         'my.flat.key': copy({
           destinationKey: 'my.nested.key',
@@ -142,7 +142,7 @@ describe('object-transformer', () => {
       },
     },
     {
-      testType: 'nested input key and flat output key',
+      testType: 'nested input key and flat destination key',
       rules: {
         'my.nested.key': copy({
           destinationKey: 'my.flat.key',
@@ -161,7 +161,7 @@ describe('object-transformer', () => {
       },
     },
     {
-      testType: 'nested input key and nested output key',
+      testType: 'nested input key and nested destination key',
       rules: {
         'my.nested.input.key': copy({
           destinationKey: 'my.nested.output.key',
@@ -173,6 +173,62 @@ describe('object-transformer', () => {
       },
       expectedOutput: {
         my: { nested: { output: { key: 'my nested value' } } },
+      },
+    },
+    {
+      testType: 'flat input key used to create a nested output',
+      rules: {
+        'where.name': copy(),
+        'where.age.lte': copy({ parser: parseInt }),
+        'where.age.gte': copy({ parser: parseInt }),
+        'data.contentFilter': copy({ parser: JSON.parse }),
+      },
+      options: { nestedInputKeys: false },
+      input: {
+        'where.name': 'hiro',
+        'where.age.lte': '32',
+        'where.age.gte': '26',
+        'data.contentFilter': 'false',
+      },
+      expectedOutput: {
+        where: {
+          name: 'hiro',
+          age: {
+            lte: 32,
+            gte: 26,
+          },
+        },
+        data: {
+          contentFilter: false,
+        },
+      },
+    },
+    {
+      testType: 'nested input key used to create a flat output',
+      rules: {
+        'where.name': copy(),
+        'where.age.lte': copy({ parser: String }),
+        'where.age.gte': copy({ parser: String }),
+        'data.contentFilter': copy({ parser: String }),
+      },
+      options: { nestedOutputKeys: false },
+      input: {
+        where: {
+          name: 'hiro',
+          age: {
+            lte: 32,
+            gte: 26,
+          },
+        },
+        data: {
+          contentFilter: false,
+        },
+      },
+      expectedOutput: {
+        'where.name': 'hiro',
+        'where.age.lte': '32',
+        'where.age.gte': '26',
+        'data.contentFilter': 'false',
       },
     },
   ])(
