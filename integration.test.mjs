@@ -112,7 +112,10 @@ describe('object-transformer', () => {
         rules: {
           'my.flat.key': copy({ destinationKey: 'some.different.flat.key' }),
         },
-        options: { pathSeparator: null },
+        options: {
+          nestedInputKeys: false,
+          nestedOutputKeys: false,
+        },
         input: {
           'my.flat.key': 'my flat value',
         },
@@ -121,14 +124,13 @@ describe('object-transformer', () => {
         },
       },
       {
-        testType: 'flat input key and nested output',
+        testType: 'flat input key and nested output key',
         rules: {
           'my.flat.key': copy({
             destinationKey: 'my.nested.key',
-            options: { pathSeparator: '.' },
           }),
         },
-        options: { pathSeparator: null },
+        options: { nestedInputKeys: false },
         input: {
           'my.flat.key': 'my originally flat value',
         },
@@ -141,14 +143,13 @@ describe('object-transformer', () => {
         },
       },
       {
-        testType: 'nested input key and flat output',
+        testType: 'nested input key and flat output key',
         rules: {
           'my.nested.key': copy({
             destinationKey: 'my.flat.key',
-            options: { pathSeparator: null },
           }),
         },
-        options: { pathSeparator: '.' },
+        options: { nestedOutputKeys: false },
         input: {
           my: {
             nested: {
@@ -158,6 +159,21 @@ describe('object-transformer', () => {
         },
         expectedOutput: {
           'my.flat.key': 'my originally nested value',
+        },
+      },
+      {
+        testType: 'nested input key and nested output key',
+        rules: {
+          'my.nested.input.key': copy({
+            destinationKey: 'my.nested.output.key',
+          }),
+        },
+        options: {},
+        input: {
+          my: { nested: { input: { key: 'my nested value' } } },
+        },
+        expectedOutput: {
+          my: { nested: { output: { key: 'my nested value' } } },
         },
       },
     ])(
