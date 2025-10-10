@@ -64,7 +64,7 @@ This parameter should be of type object, and can utilise the following propertie
 |Property|Default|Description|
 |--------|-------|-----------|
 |```omitRulelessKeys```|```false```|By default, any keys on the input object that don't match a rule will be copied over to the output as is. Set to true to ignore any input keys that do not have a rule explicitly set for them.|
-|```omitEmptyStrings```|```false```|This does nothing internally on the transformer, but is passed along with the other options to each rule function. The rule function can then use it to do whatever. The named export ```copy``` function uses this to decide whether to keep empty strings or not.
+|```omitEmptyStrings```|```false```|This does nothing internally on the transformer, but is passed along with the other options to each rule function. The rule function can then use it to do whatever. The named export ```copy``` function uses this to decide whether to keep empty strings or not.|
 |```pathSeparator```|```'.'```|If nested input or output keys are being used, this will determine how the path segments are delineated. E.g. ```'my.nested.path'```, ```'my/nested/path'```.|
 |```nestedInputKeys```|```true```|By default, a rule with a key of ```'my.nested.key'``` will look for a value in ```{ my: { nested: { key: 'my nested value' }}}``` on the input object, but if this is set to ```false```, the rule will look for the value in ```{ 'my.nested.key': 'my nested value' }```.|
 |```nestedOutputKeys```|```true```|This does nothing internally on the transformer, but is passed along with the other options to each rule function. The rule function can then use it to do whatever. The named export ```copy``` function uses this to decide whether to use nested keys or flat keys, similarly to the transformer with the ```nestedInputKeys``` property.|
@@ -80,7 +80,7 @@ For most purposes, the built-in ```copy``` rule can probably cover it. It can cr
 |```parser```|```(v) => v```|This can be used to parse the input value into a different type. For example, you could use ```parseInt``` or ```parseFloat``` to get a number, ```String``` to parse the value into a string, ```JSON.parse``` to get boolean, arrays, or objects from strings, or import ```parseDate``` to easily parse a date value from a string.|
 |```destinationKey```|```undefined```|If ```destinationKey``` is ```undefined```, the function will just use the input key.|
 |```conflictHandler```|```undefined```|If  ```conflictHandler``` is ```undefined```, the ```deepMerge``` function will use its default, which puts non-object values on duplicate keys together into an array - zero data loss.|
-|```options```|```{}```|This can be used to override any properties on the ```options``` passed to the rule function by the transformer. Useful for customising the ```pathSeparator``` or ```nestedOutputKeys``` on a rule-by-rule basis.|
+|```options```|```{}```|This can be used to override any properties on the ```options``` passed to the rule function by the transformer. Useful for customising the ```pathSeparator```, ```omitEmptyStrings``` or ```nestedOutputKeys``` properties on a rule-by-rule basis.|
 
 ### Writing a Custom Rule
 
@@ -120,7 +120,7 @@ It is useful to curry functions to customise behaviour and do more complicated m
 ```js
 // This copies the value from the input object and puts it on a different key on the output object.
 const copyToDifferentPath = (outputKey) => {
-  // Don't need input key or options, so don't bother destructuring them.
+  // Don't need input key or options, so won't bother destructuring them.
   return ({ output, value }) => {
     output[outputKey] = value;
   }
