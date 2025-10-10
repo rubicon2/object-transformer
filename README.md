@@ -64,6 +64,7 @@ This parameter should be of type object, and can utilise the following propertie
 |Property|Default|Description|
 |--------|-------|-----------|
 |```omitRulelessKeys```|```false```|By default, any keys on the input object that don't match a rule will be copied over to the output as is. Set to true to ignore any input keys that do not have a rule explicitly set for them.|
+|```omitEmptyStrings```|```false```|This does nothing internally on the transformer, but is passed along with the other options to each rule function. The rule function can then use it to do whatever. The named export ```copy``` function uses this to decide whether to keep empty strings or not.
 |```pathSeparator```|```'.'```|If nested input or output keys are being used, this will determine how the path segments are delineated. E.g. ```'my.nested.path'```, ```'my/nested/path'```.|
 |```nestedInputKeys```|```true```|By default, a rule with a key of ```'my.nested.key'``` will look for a value in ```{ my: { nested: { key: 'my nested value' }}}``` on the input object, but if this is set to ```false```, the rule will look for the value in ```{ 'my.nested.key': 'my nested value' }```.|
 |```nestedOutputKeys```|```true```|This does nothing internally on the transformer, but is passed along with the other options to each rule function. The rule function can then use it to do whatever. The named export ```copy``` function uses this to decide whether to use nested keys or flat keys, similarly to the transformer with the ```nestedInputKeys``` property.|
