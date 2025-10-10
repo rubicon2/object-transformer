@@ -105,5 +105,83 @@ describe('object-transformer', () => {
         },
       });
     });
+
+    it.each([
+      {
+        testType: 'flat input key and flat output key',
+        rules: {
+          'my.flat.key': copy({ destinationKey: 'some.different.flat.key' }),
+        },
+        options: {
+          nestedInputKeys: false,
+          nestedOutputKeys: false,
+        },
+        input: {
+          'my.flat.key': 'my flat value',
+        },
+        expectedOutput: {
+          'some.different.flat.key': 'my flat value',
+        },
+      },
+      {
+        testType: 'flat input key and nested output key',
+        rules: {
+          'my.flat.key': copy({
+            destinationKey: 'my.nested.key',
+          }),
+        },
+        options: { nestedInputKeys: false },
+        input: {
+          'my.flat.key': 'my originally flat value',
+        },
+        expectedOutput: {
+          my: {
+            nested: {
+              key: 'my originally flat value',
+            },
+          },
+        },
+      },
+      {
+        testType: 'nested input key and flat output key',
+        rules: {
+          'my.nested.key': copy({
+            destinationKey: 'my.flat.key',
+          }),
+        },
+        options: { nestedOutputKeys: false },
+        input: {
+          my: {
+            nested: {
+              key: 'my originally nested value',
+            },
+          },
+        },
+        expectedOutput: {
+          'my.flat.key': 'my originally nested value',
+        },
+      },
+      {
+        testType: 'nested input key and nested output key',
+        rules: {
+          'my.nested.input.key': copy({
+            destinationKey: 'my.nested.output.key',
+          }),
+        },
+        options: {},
+        input: {
+          my: { nested: { input: { key: 'my nested value' } } },
+        },
+        expectedOutput: {
+          my: { nested: { output: { key: 'my nested value' } } },
+        },
+      },
+    ])(
+      'with $testType, produces the correct results',
+      ({ rules, options, input, expectedOutput }) => {
+        const t = transformer(rules, options);
+        expect(t(input)).toStrictEqual(expectedOutput);
+      },
+    );
   });
 });
