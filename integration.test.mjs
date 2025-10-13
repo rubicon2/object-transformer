@@ -71,6 +71,62 @@ describe('object-transformer', () => {
     });
   });
 
+  it('Re-implement url-query-to-prisma usage example', () => {
+    const rules = {
+      title: copy({
+        destinationKey: 'where.title',
+        parser: (value) => ({ contains: value, mode: 'insensitive' }),
+      }),
+      author: copy({
+        destinationKey: 'where.owner.name',
+        parser: (value) => ({ contains: value, mode: 'insensitive' }),
+      }),
+      fromDate: copy({
+        destinationKey: 'where.publishedAt.gte',
+        parser: parseDate,
+      }),
+      toDate: copy({
+        destinationKey: 'where.publishedAt.lte',
+        parser: parseDate,
+      }),
+    };
+
+    const options = {
+      omitRulelessKeys: true,
+      omitEmptyStrings: true,
+    };
+
+    // /blogs?title=myBlog&author=jimbo&fromDate=2020-01-01&toDate=2020-12-31
+    const inputObj = {
+      title: 'myBlog',
+      author: 'jimbo',
+      fromDate: '2020-01-01',
+      toDate: '2020-12-31',
+    };
+
+    const t = transformer(rules, options);
+    outputObj = t(inputObj);
+
+    expect(outputObj).toStrictEqual({
+      where: {
+        title: {
+          contains: 'myBlog',
+          mode: 'insensitive',
+        },
+        owner: {
+          name: {
+            contains: 'jimbo',
+            mode: 'insensitive',
+          },
+        },
+        publishedAt: {
+          gte: new Date('2020-01-01'), // Date object representing this date.
+          lte: new Date('2020-12-31'), // Date object representing this date.
+        },
+      },
+    });
+  });
+
   it('Implement a hypothetical url-query-to-prisma update ruleset', () => {
     const prismaUpdateRules = {
       userId: copy({ destinationKey: 'where.id' }),
