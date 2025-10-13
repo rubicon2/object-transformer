@@ -14,10 +14,10 @@ describe('object-transformer', () => {
       take: copy({ parser: parseInt }),
       skip: copy({ parser: parseInt }),
       cursor: copy({ destinationKey: 'cursor.id', parser: parseInt }),
-      orderBy: copy({ destinationKey: 'temp.orderBy' }),
-      sortOrder: copy({ destinationKey: 'temp.sortOrder' }),
+      orderBy: copy({ destinationKey: '_temp.orderBy' }),
+      sortOrder: copy({ destinationKey: '_temp.sortOrder' }),
       _onFinish: ({ output }) => {
-        const { orderBy, sortOrder } = output.temp;
+        const { orderBy, sortOrder } = output._temp;
         // Make sure these are both in arrays so we don't have to program an array version and non-array version.
         const orderByArray = Array.isArray(orderBy) ? orderBy : [orderBy];
         const sortOrderArray = Array.isArray(sortOrder)

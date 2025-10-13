@@ -54,8 +54,8 @@ This parameter should be of type object, and is used to contain rules for whatev
 
 |Key|Description|
 |-|-|
-|_onStart|Runs before the user-defined rules begin running. Use this for any initialisation you might need.|
-|_onFinish|Runs after the final user-defined rule has finished, but before the built-in temp object has been deleted. Use this to tie up any input data that depends on each other. As the rules are held in an object, there is no guarantee as to what order the rules will be run in. Therefore, if you are writing a rule that depends on the values produced by another rule, it may be easier to simply store the values on ```output.temp[key]``` and then tie them together in whatever way you want within the _onFinish rule, since this is guaranteed to run after all the other rules are finished.|
+|```_onStart```|Runs before the user-defined rules begin running. Use this for any initialisation you might need.|
+|```_onFinish```|Runs after the final user-defined rule has finished, but before the built-in _temp object has been deleted. Use this to tie up any input data that depends on each other. As the rules are held in an object, there is no guarantee as to what order the rules will be run in. Therefore, if you are writing a rule that depends on the values produced by another rule, it may be easier to simply store the values on ```output._temp[key]``` and then tie them together in whatever way you want within the ```_onFinish``` rule, since this is guaranteed to run after all the other rules are finished.|
 
 ### Options Parameter
 
@@ -177,14 +177,16 @@ const output = transformer(rules)(input);
 // }
 ```
 
-## The Temp Object
+## The _temp Object
 
 When the object transformer starts processing the input, the output will be initialised to the following:
 
 ```js
 let output = {
-  temp: {}
+  _temp: {}
 };
 ```
 
-This temp object can be used to store any values you might need to keep from one rule to another, or to use within the ```_onFinish``` function, which runs after all user-defined rules but before the temp object is removed. If one rule depends on data collected from another rule, instead of writing code that branches depending on whether the data has been collected or not, it would be simpler just to assign the data to a key on the temp object, and then do whatever needs to be done within the ```_onFinish``` function.
+This ```_temp``` object can be used to store any values you might need to keep from one rule to another, or to use within the ```_onFinish``` function, which runs after all user-defined rules but before the ```_temp``` object is removed. If one rule depends on data collected from another rule, instead of writing code that branches depending on whether the data has been collected or not, it would be simpler just to assign the data to a key on the ```_temp``` object, and then do whatever needs to be done within the ```_onFinish``` function.
+
+The ```_temp``` object is prefixed with an underscore (like ```_onStart``` and ```_onFinish```) to indicate that it is used internally and cleared at the end of the function, and to reduce the likelihood of naming conflicts with user-defined output object keys.
