@@ -77,10 +77,43 @@ For most purposes, the built-in ```copy``` rule can probably cover it. It can cr
 
 |Property|Default|Description|
 |-|-|-|
-|```parser```|```(v) => v```|This can be used to parse the input value into a different type. For example, you could use ```parseInt``` or ```parseFloat``` to get a number, ```String``` to parse the value into a string, ```JSON.parse``` to get boolean, arrays, or objects from strings, or import ```parseDate``` to easily parse a date value from a string.|
+|```parser```|```(v) => v```|This can be used to parse the input value into a different type. For example, you could use ```parseInt``` or ```parseFloat``` to get a number, ```String``` to parse the value into a string, ```JSON.parse``` to get boolean, arrays, or objects from strings, or import ```parseDate``` to easily parse a date value from a string. This can also be used to customise the result or if the value is of type object, include other properties.|
 |```destinationKey```|```undefined```|If ```destinationKey``` is ```undefined```, the function will just use the input key.|
 |```conflictHandler```|```undefined```|If  ```conflictHandler``` is ```undefined```, the ```deepMerge``` function will use its default, which puts non-object values on duplicate keys together into an array - zero data loss.|
 |```options```|```{}```|This can be used to override any properties on the ```options``` passed to the rule function by the transformer. Useful for customising the ```pathSeparator```, ```omitEmptyStrings``` or ```nestedOutputKeys``` properties on a rule-by-rule basis.|
+
+#### Using The Copy Parser to Create Complex Objects
+
+The parser can be used for more than processing a string into another type. Consider the below:
+
+```js
+const rules = {
+  name: copy({
+    destinationKey: 'where.name',
+    parser: (value) => ({ contains: value, mode: 'insensitive' }),
+  }),
+  date: copy({
+    destinationKey: 'where',
+    parser: (value) => ({ date: parseDate(value) }),
+  }),
+};
+
+const input = {
+  name: 'jimmy',
+  date: '2020-12-25',
+};
+
+const myTransformer = transformer(rules);
+const output = myTransformer(input);
+// Result:
+// where: {
+//   name: {
+//     contains: 'jimmy',
+//     mode: 'insensitive',
+//   },
+//   date: new Date('2020-12-25'),
+// };
+```
 
 ### Writing a Custom Rule
 

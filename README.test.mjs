@@ -37,6 +37,37 @@ describe('README examples', () => {
     });
   });
 
+  it('using the parser to create complex objects', () => {
+    const rules = {
+      name: copy({
+        destinationKey: 'where.name',
+        parser: (value) => ({ contains: value, mode: 'insensitive' }),
+      }),
+      date: copy({
+        destinationKey: 'where',
+        parser: (value) => ({ date: parseDate(value) }),
+      }),
+    };
+
+    const input = {
+      name: 'jimmy',
+      date: '2020-12-25',
+    };
+
+    const myTransformer = transformer(rules);
+    const output = myTransformer(input);
+
+    expect(output).toStrictEqual({
+      where: {
+        name: {
+          contains: 'jimmy',
+          mode: 'insensitive',
+        },
+        date: new Date('2020-12-25'),
+      },
+    });
+  });
+
   it('writing a custom rule', () => {
     // This just copies the value from the input object onto the output object.
     const myCustomRule = ({ output, key, value, options }) => {
