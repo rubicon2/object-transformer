@@ -121,7 +121,7 @@ If copy doesn't cover it, you can write your own rule like the following:
 
 ```js
 // This just copies the value from the input object onto the output object.
-const myCustomRule = ({output, key, value, options}) => {
+const myCustomRule = ({ output, key, value, options }) => {
   // Do not re-assign output itself like below - this will lose the reference to the original object.
   // output = { ...output, [key]: value }
   // But this is ok!
