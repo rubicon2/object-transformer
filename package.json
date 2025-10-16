@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Turn one object into a differently formatted object, via user-defined rules",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "vitest"
   },
