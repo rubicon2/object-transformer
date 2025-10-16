@@ -9,6 +9,65 @@ beforeEach(() => {
 
 // Test to make sure all the stuff works together the way we want.
 describe('object-transformer', () => {
+  it('can parse the value of an input key into a different data type', () => {
+    const inputObj = {
+      key1: 'some',
+      key2: '97',
+    };
+
+    const rules = {
+      key1: ({ output, key, value }) => (output[key] = value + ' string'),
+      key2: ({ output, key, value }) => (output[key] = parseInt(value)),
+    };
+
+    const t = transformer(rules);
+    const outputObj = t(inputObj);
+
+    expect(outputObj).toStrictEqual({
+      key1: 'some string',
+      key2: 97,
+    });
+  });
+
+  it("can map an input key's value to a different output key", () => {
+    const inputObj = {
+      originalKey: '97',
+    };
+
+    const rules = {
+      originalKey: ({ output, value }) => (output.newKey = parseInt(value)),
+    };
+
+    const t = transformer(rules);
+    const outputObj = t(inputObj);
+
+    expect(outputObj).toStrictEqual({
+      newKey: 97,
+    });
+  });
+
+  it("can create complex objects containing the input key's value", () => {
+    const inputObj = {
+      myKey: '1997',
+    };
+
+    const rules = {
+      myKey: ({ output, key, value }) =>
+        (output[key] = { a: { b: parseInt(value) } }),
+    };
+
+    const t = transformer(rules);
+    const outputObj = t(inputObj);
+
+    expect(outputObj).toStrictEqual({
+      myKey: {
+        a: {
+          b: 1997,
+        },
+      },
+    });
+  });
+
   it('Re-implement url-query-to-prisma default find ruleset', () => {
     const prismaFindRules = {
       take: copy({ parser: parseInt }),
