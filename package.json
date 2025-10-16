@@ -1,5 +1,5 @@
 {
-  "name": "object-transformer",
+  "name": "@rubicon2/object-transformer",
   "version": "1.0.0",
   "description": "Turn one object into a differently formatted object, via user-defined rules",
   "main": "index.js",
