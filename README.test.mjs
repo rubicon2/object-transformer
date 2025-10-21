@@ -40,11 +40,11 @@ describe('README examples', () => {
   it('using the parser to create complex objects', () => {
     const rules = {
       name: copy({
-        destinationKey: 'where.name',
+        key: 'where.name',
         parser: (value) => ({ contains: value, mode: 'insensitive' }),
       }),
       date: copy({
-        destinationKey: 'where',
+        key: 'where',
         parser: (value) => ({ date: parseDate(value) }),
       }),
     };
