@@ -4,12 +4,9 @@ import { describe, it, expect } from 'vitest';
 describe('README examples', () => {
   it('usage', () => {
     const rules = {
-      'user.age': copy({ destinationKey: 'where.age', parser: parseInt }),
-      'date.from': copy({
-        destinationKey: 'where.date.gte',
-        parser: parseDate,
-      }),
-      'date.to': copy({ destinationKey: 'where.date.lte', parser: parseDate }),
+      'user.age': copy({ key: 'where.age', parser: parseInt }),
+      'date.from': copy({ key: 'where.date.gte', parser: parseDate }),
+      'date.to': copy({ key: 'where.date.lte', parser: parseDate }),
     };
 
     const input = {

@@ -14,9 +14,9 @@ npm install @rubicon2/object-transformer
 import transformer, { copy, parseDate } from '@rubicon2/object-transformer';
 
 const rules = {
-  'user.age': copy({ destinationKey: 'where.age', parser: parseInt }),
-  'date.from': copy({ destinationKey: 'where.date.gte', parser: parseDate }),
-  'date.to': copy({ destinationKey: 'where.date.lte', parser: parseDate })
+  'user.age': copy({ key: 'where.age', parser: parseInt }),
+  'date.from': copy({ key: 'where.date.gte', parser: parseDate }),
+  'date.to': copy({ key: 'where.date.lte', parser: parseDate })
 }
 
 const input = {
@@ -78,8 +78,8 @@ For most purposes, the built-in ```copy``` rule can probably cover it. It can cr
 |Property|Default|Description|
 |-|-|-|
 |```parser```|```(v) => v```|This can be used to parse the input value into a different type. For example, you could use ```parseInt``` or ```parseFloat``` to get a number, ```String``` to parse the value into a string, ```JSON.parse``` to get boolean, arrays, or objects from strings, or import ```parseDate``` to easily parse a date value from a string. This can also be used to customise the result or if the value is of type object, include other properties.|
-|```destinationKey```|```undefined```|If ```destinationKey``` is ```undefined```, the function will just use the input key.|
-|```key```|```undefined```|This is a synonym for ```destinationKey``` as typing that over and over gets old fast. Even 'outputKey' would have been better...|
+|```key```|```undefined```|The key that will be used to store the value. Can be a nested path. If ```key``` is ```undefined```, the function will just use the input key.|
+|```destinationKey```|```undefined```|This is a synonym for ```key```, a leftover from version 1 after which I quickly got bored of typing this property name over and over. Way too long. Even 'outputKey' would have been shorter.|
 |```conflictHandler```|```undefined```|If  ```conflictHandler``` is ```undefined```, the ```deepMerge``` function will use its default, which puts non-object values on duplicate keys together into an array - zero data loss.|
 |```options```|```{}```|This can be used to override any properties on the ```options``` passed to the rule function by the transformer. Useful for customising the ```pathSeparator```, ```omitEmptyStrings``` or ```nestedOutputKeys``` properties on a rule-by-rule basis.|
 
