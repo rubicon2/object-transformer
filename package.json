@@ -4,8 +4,11 @@
   "description": "Turn one object into a differently formatted object, via user-defined rules",
   "type": "module",
   "main": "index.mjs",
+  "typings": "index.d.mts",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "types": "rm -rf index.d.mts lib/*.d.mts && npx tsc",
+    "prepublish": "npm run types"
   },
   "repository": {
     "type": "git",

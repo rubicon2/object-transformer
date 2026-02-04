@@ -1,0 +1,24 @@
+{
+  "include": ["index.mjs", "lib/*.mjs"],
+  "exclude": ["index.d.mts", "lib/*.d.mts", "lib/*.test.*"],
+  "compilerOptions": {
+    // Only generating declarations for this js project.
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "esModuleInterop": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Recommended Options
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  }
+}
