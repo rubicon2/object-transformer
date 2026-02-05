@@ -42,8 +42,8 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@rubicon2/deep-merge": "^1.1.1",
-    "path-to-nested-obj": "^1.0.0",
-    "value-from-nested-obj": "^1.1.0"
+    "@rubicon2/deep-merge": "^1.2.0",
+    "path-to-nested-obj": "^1.1.0",
+    "value-from-nested-obj": "^1.2.1"
   }
 }
