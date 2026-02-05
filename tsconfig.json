@@ -1,7 +1,9 @@
 {
-  "include": ["index.mjs", "lib/*.mjs"],
-  "exclude": ["index.d.mts", "lib/*.d.mts", "lib/*.test.*"],
+  "include": ["lib/*.mjs"],
+  "exclude": ["lib/*.d.mts"],
   "compilerOptions": {
+    "rootDir": "lib",
+    "outDir": "types",
     // Only generating declarations for this js project.
     "allowJs": true,
     "checkJs": true,

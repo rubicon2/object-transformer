@@ -1,4 +1,4 @@
-import * as rules from './rules.mjs';
+import * as rules from '../lib/rules.mjs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 let output;

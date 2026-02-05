@@ -1,4 +1,4 @@
-import transformer from './object-transformer.mjs';
+import transformer from '../lib/object-transformer.mjs';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('object-transformer', () => {
@@ -82,6 +82,62 @@ describe('object-transformer', () => {
         expect(() => transformer(null, options)).toThrowError(
           'options parameter is not an object, but a' + parameterType,
         );
+      },
+    );
+
+    it.each([
+      {
+        options: {
+          nestedInputKeys: 'some string',
+        },
+        expectedMsg: 'options.nestedInputKeys is not boolean, but type string',
+      },
+      {
+        options: {
+          nestedInputKeys: 97,
+        },
+        expectedMsg: 'options.nestedInputKeys is not boolean, but type number',
+      },
+      {
+        options: {
+          nestedOutputKeys: 'some string',
+        },
+        expectedMsg: 'options.nestedOutputKeys is not boolean, but type string',
+      },
+      {
+        options: {
+          nestedOutputKeys: 97,
+        },
+        expectedMsg: 'options.nestedOutputKeys is not boolean, but type number',
+      },
+      {
+        options: {
+          omitEmptyStrings: 'some string',
+        },
+        expectedMsg: 'options.omitEmptyStrings is not boolean, but type string',
+      },
+      {
+        options: {
+          omitEmptyStrings: 97,
+        },
+        expectedMsg: 'options.omitEmptyStrings is not boolean, but type number',
+      },
+      {
+        options: {
+          omitRulelessKeys: 'some string',
+        },
+        expectedMsg: 'options.omitRulelessKeys is not boolean, but type string',
+      },
+      {
+        options: {
+          omitRulelessKeys: 97,
+        },
+        expectedMsg: 'options.omitRulelessKeys is not boolean, but type number',
+      },
+    ])(
+      'throws an error with a useful message if $expectedMsg',
+      ({ options, expectedMsg }) => {
+        expect(() => transformer(null, options)).toThrowError(expectedMsg);
       },
     );
 
