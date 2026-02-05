@@ -67,7 +67,7 @@ describe('README examples', () => {
 
   it('writing a custom rule', () => {
     // This just copies the value from the input object onto the output object.
-    const myCustomRule = ({ output, key, value, options }) => {
+    const myCustomRule = ({ output, key, value }) => {
       // Do not re-assign output itself like below - this will lose the reference to the original object.
       // output = { ...output, [key]: value }
       // But this is ok!
