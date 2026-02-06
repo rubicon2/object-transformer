@@ -296,7 +296,13 @@ describe('object-transformer', () => {
       expect(myKey).toHaveBeenCalledTimes(1);
       expect(_onFinish).toHaveBeenCalledTimes(1);
 
-      expect(_onStart).toHaveBeenLastCalledWith({ output, input, options });
+      expect(_onStart).toHaveBeenLastCalledWith({
+        input,
+        output,
+        key: '_onStart',
+        value: undefined,
+        options,
+      });
       expect(myKey).toHaveBeenLastCalledWith({
         input,
         output,
@@ -305,8 +311,10 @@ describe('object-transformer', () => {
         options,
       });
       expect(_onFinish).toHaveBeenLastCalledWith({
-        output,
         input,
+        output,
+        key: '_onFinish',
+        value: undefined,
         options,
       });
     });
@@ -468,6 +476,8 @@ describe('object-transformer', () => {
       expect(_onStartParams).toStrictEqual({
         input: inputObj,
         output: { _temp: {} },
+        key: '_onStart',
+        value: undefined,
         options,
       });
 
@@ -484,6 +494,8 @@ describe('object-transformer', () => {
       expect(_onFinishParams).toStrictEqual({
         input: inputObj,
         output: { myKey: 'my value', _temp: { _onStart: 'saved to temp' } },
+        key: '_onFinish',
+        value: undefined,
         options,
       });
     });
