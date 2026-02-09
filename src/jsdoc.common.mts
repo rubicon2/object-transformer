@@ -17,7 +17,7 @@ export interface ObjAny {
  * @property {boolean} [nestedInputKeys] - Whether the input keys should use the pathSeparator to determine object nesting, or be treated as flat keys - i.e. if false, 'my.nested.key' and 'myKey' are both on the root of the object. Defaults to true.
  * @property {boolean} [nestedOutputKeys] - Whether the output keys should use the pathSeparator to determine object nesting, or be treated as flat keys - i.e. if false, 'my.nested.key' and 'myKey' are both on the root of the object. Defaults to true.
  */
-export interface Options {
+export interface Options extends ObjAny {
   omitRulelessKeys?: boolean;
   omitEmptyStrings?: boolean;
   pathSeparator?: string;
