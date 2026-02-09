@@ -5,7 +5,7 @@ import type {
   RuleParams,
   Parser,
 } from './jsdoc.common.mjs';
-import { DefaultOptions } from './jsdoc.common.mjs';
+import { defaultOptions } from './jsdoc.common.mjs';
 import pathToNestedObj from 'path-to-nested-obj';
 import deepMerge from '@rubicon2/deep-merge';
 
@@ -58,12 +58,12 @@ function copy({
     // Merge options provided in arguments, with local overrides which are
     // provided and locked in when this anonymous function is instantiated.
     const allOptions: Options = {
-      ...DefaultOptions,
+      ...defaultOptions,
       ...transformerOptions, // Transformer-wide options.
       ...options, // Rule-specific options.
     };
     let { pathSeparator, nestedOutputKeys, omitEmptyStrings } = allOptions;
-    if (!pathSeparator) pathSeparator = DefaultOptions.pathSeparator;
+    if (!pathSeparator) pathSeparator = defaultOptions.pathSeparator;
 
     if (typeof value === 'string' && value.length === 0 && omitEmptyStrings)
       return;

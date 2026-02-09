@@ -25,7 +25,7 @@ export interface Options {
   nestedOutputKeys?: boolean;
 }
 
-export const DefaultOptions: Required<Options> = {
+export const defaultOptions: Required<Options> = {
   omitRulelessKeys: false,
   omitEmptyStrings: false,
   pathSeparator: '.',
