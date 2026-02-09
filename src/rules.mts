@@ -1,4 +1,5 @@
-import type { StringKeyObj, Options } from './jsdoc.common.mjs';
+import type { StringKeyObj } from './common.mjs';
+import type { Options } from './options.mjs';
 import type { Parser } from './parsers.mjs';
 import pathToNestedObj from 'path-to-nested-obj';
 import deepMerge from '@rubicon2/deep-merge';
