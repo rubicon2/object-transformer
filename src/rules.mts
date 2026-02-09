@@ -1,5 +1,5 @@
 import type {
-  ObjAny,
+  StringKeyObj,
   Options,
   Rule,
   RuleParams,
@@ -69,7 +69,7 @@ function copy({
       return;
 
     if (nestedOutputKeys) {
-      const obj: ObjAny = pathToNestedObj(
+      const obj: StringKeyObj<any> = pathToNestedObj(
         destinationKey || inputKey,
         pathSeparator,
         parser(value),
