@@ -1,4 +1,12 @@
-import type { Parser } from './jsdoc.common.mjs';
+/**
+ * @interface
+ * @param {*} value - Input value, of any type.
+ * @returns {*} Output value, of any type.
+ */
+export interface Parser {
+  (value: any): any;
+}
+
 // Match format of parseFloat, parseInt, etc.
 
 /**
