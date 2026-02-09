@@ -4,6 +4,9 @@ import valueFromNestedObj from 'value-from-nested-obj';
 
 /**
  * An object containing rule functions which correspond to keys to be processed on the input object.
+ * The function corresponding to the _onStart key is run before all other rules, but after the _temp
+ * object has been added to the output object, and the _onFinish function is run after all other rules,
+ * but before the _temp object has been deleted.
  * @interface
  */
 export type Rules = StringKeyObj<Rule>;
