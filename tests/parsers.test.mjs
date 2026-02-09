@@ -1,4 +1,4 @@
-import * as parsers from '../lib/parsers.mjs';
+import * as parsers from '../dist/parsers.mjs';
 import { describe, it, expect } from 'vitest';
 
 describe('parsers', () => {
