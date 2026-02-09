@@ -1,4 +1,5 @@
-import type { StringKeyObj, Options, Rule } from './jsdoc.common.mjs';
+import type { StringKeyObj, Options } from './jsdoc.common.mjs';
+import type { Rule } from './rules.mjs';
 import { defaultOptions } from './jsdoc.common.mjs';
 import valueFromNestedObj from 'value-from-nested-obj';
 

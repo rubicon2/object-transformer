@@ -32,28 +32,3 @@ export const defaultOptions: Required<Options> = {
   nestedInputKeys: true,
   nestedOutputKeys: true,
 };
-
-/**
- * Parameters passed to each transformer rule.
- * @interface
- * @param {StringKeyObj<any>} input - The input object.
- * @param {StringKeyObj<any>} output - The output object.
- * @param {string} key - The input key path.
- * @param {*} value - The value retrieved from the input object with the input key path.
- * @param {Options} options - The options object as determined when the transformer was instantiated.
- */
-export interface RuleParams {
-  input: StringKeyObj<any>;
-  output: StringKeyObj<any>;
-  key: string;
-  value: any;
-  options: Options;
-}
-
-/**
- * The function signature for a rule function.
- * @interface
- */
-export interface Rule {
-  (params: RuleParams): void;
-}
