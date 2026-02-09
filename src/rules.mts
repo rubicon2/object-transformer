@@ -58,7 +58,6 @@ function copy({
     // Merge options provided in arguments, with local overrides which are
     // provided and locked in when this anonymous function is instantiated.
     const allOptions: Options = {
-      ...defaultOptions,
       ...transformerOptions, // Transformer-wide options.
       ...options, // Rule-specific options.
     };
