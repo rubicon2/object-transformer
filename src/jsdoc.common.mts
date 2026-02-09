@@ -54,4 +54,15 @@ export interface RuleParams {
  * The function signature for a rule function.
  * @interface
  */
-export type Rule = (params: RuleParams) => void;
+export interface Rule {
+  (params: RuleParams): void;
+}
+
+/**
+ * @interface
+ * @param {*} value - Input value, of any type.
+ * @returns {*} Output value, of any type.
+ */
+export interface Parser {
+  (value: any): any;
+}

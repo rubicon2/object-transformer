@@ -1,36 +1,37 @@
+import type {
+  ObjAny,
+  Options,
+  Rule,
+  RuleParams,
+  Parser,
+} from './jsdoc.common.mjs';
+import { DefaultOptions } from './jsdoc.common.mjs';
 import pathToNestedObj from 'path-to-nested-obj';
 import deepMerge from '@rubicon2/deep-merge';
 
-// Re-usable rule functions for basic stuff.
-// Avoiding a default export allows the freedom to write more standard rules as ideas pop up.
-// But right now can't think of any.
-
-// Create local typedefs out of imports to avoid the end-user seeing the import path instead of just the typedef name.
-/** @typedef {import('./jsdoc.common.mjs').objAny} objAny */
-/** @typedef {import('./jsdoc.common.mjs').options} options */
-/** @typedef {import('./jsdoc.common.mjs').rule} rule */
-
 /**
- * @callback parser
- * @param {*} value - Input value, of any type.
- * @returns {*} Output value, of any type.
- */
-
-/**
- * @callback conflictHandler
+ * @interface
  * @param {*} a - The first value assigned to this key.
  * @param {*} b - The second value assigned to this key.
  * @returns {*} Returns a or b.
  */
+type ConflictHandler = (a: any, b: any) => any;
 
 /**
- * @typedef {object} copyParams
- * @property {parser} [parser] - Optional function to process the input value before assigning to the output key. Can also be used to construct an object for the value to reside in, before being assigned to the output key.
+ * @interface
+ * @property {Parser} [parser] - Optional function to process the input value before assigning to the output key. Can also be used to construct an object for the value to reside in, before being assigned to the output key.
  * @property {string} [destinationKey] - The key path on the output object which will contain the value once it has been processed by the parser. This can be a nested path, with each path segment separated by default with a dot.
  * @property {string} [key] - Synonym of destinationKey. Specifies the key path on the output object which will contain the value once it has been processed by the parser. This can be a nested path, with each path segment separated by default with a dot.
- * @property {conflictHandler} [conflictHandler] - This will be called if there are two non-object values assigned to the same key. By default, deep-merge puts the values into an array.
- * @property {options} [options] - This can be used to override any options provided by the transformer when it calls the copy rule.
+ * @property {ConflictHandler} [conflictHandler] - This will be called if there are two non-object values assigned to the same key. By default, deep-merge puts the values into an array.
+ * @property {Options} [options] - This can be used to override any options provided by the transformer when it calls the copy rule.
  */
+interface CopyParams {
+  parser?: Parser;
+  destinationKey?: string;
+  key?: string;
+  conflictHandler?: ConflictHandler;
+  options?: Options;
+}
 
 /**
  * Create a rule function that copies an input value, parses it with an optional parser, and then puts the result on the output object at a key path determined by the user-provided destinationKey. If there is no destinationKey it will copy to the same path as the input key.
@@ -44,26 +45,31 @@ function copy({
   key,
   conflictHandler,
   options = {},
-} = {}) {
+}: CopyParams = {}): Rule {
   // If destinationKey is set, use that, but otherwise use key.
   if (!destinationKey) destinationKey = key;
 
-  return ({ output, key: inputKey, value, options: transformerOptions }) => {
+  return ({
+    output,
+    key: inputKey,
+    value,
+    options: transformerOptions,
+  }: RuleParams) => {
     // Merge options provided in arguments, with local overrides which are
     // provided and locked in when this anonymous function is instantiated.
-    /** @type {options} */
-    const allOptions = {
-      ...transformerOptions,
-      ...options,
+    const allOptions: Options = {
+      ...DefaultOptions,
+      ...transformerOptions, // Transformer-wide options.
+      ...options, // Rule-specific options.
     };
-    const { pathSeparator, nestedOutputKeys, omitEmptyStrings } = allOptions;
+    let { pathSeparator, nestedOutputKeys, omitEmptyStrings } = allOptions;
+    if (!pathSeparator) pathSeparator = DefaultOptions.pathSeparator;
 
     if (typeof value === 'string' && value.length === 0 && omitEmptyStrings)
       return;
 
     if (nestedOutputKeys) {
-      /** @type {objAny} */
-      const obj = pathToNestedObj(
+      const obj: ObjAny = pathToNestedObj(
         destinationKey || inputKey,
         pathSeparator,
         parser(value),
