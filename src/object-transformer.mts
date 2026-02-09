@@ -1,38 +1,20 @@
+import type { StringKeyObj, Options, Rule } from './jsdoc.common.mjs';
+import { defaultOptions } from './jsdoc.common.mjs';
 import valueFromNestedObj from 'value-from-nested-obj';
-
-// Create local typedefs out of imports to avoid the end-user seeing the import path instead of just the typedef name.
-/** @typedef {import('./jsdoc.common.mjs').objAny} objAny */
-/** @typedef {import('./jsdoc.common.mjs').options} options */
-/** @typedef {import('./jsdoc.common.mjs').rule} rule */
 
 /**
  * An object containing rule functions which correspond to keys to be processed on the input object.
- * @typedef {{[key: string]: rule}} rules
+ * @interface
  */
-
-/** @type {options} */
-const defaultOptions = {
-  omitRulelessKeys: false,
-  omitEmptyStrings: false,
-  pathSeparator: '.',
-  nestedInputKeys: true,
-  nestedOutputKeys: true,
-};
-
-/**
- * The function returned by the transformer, which can be called with an input object and will run the rules with the options and produce an output object.
- * @callback transformerFunction
- * @param {objAny} input
- * @returns {objAny} The transformed object.
- */
+export type Rules = StringKeyObj<Rule>;
 
 /**
  * Throw errors if the parameters or parameter properties are the wrong types.
- * @param {rules} [rules] - The rules object to check.
- * @param {objAny} [options] - The options object to check.
+ * @param {Rules} [rules] - The rules object to check.
+ * @param {Options} [options] - The options object to check.
  * @returns {void}
  */
-function checkTransformerParameters(rules, options) {
+function checkTransformerParameters(rules: Rules, options: Options) {
   // Check rules and options are valid. Have to do array separately because in js, arrays are objects.
   if (Array.isArray(rules))
     throw new Error('rules parameter is not an object, but an array');
@@ -59,27 +41,42 @@ function checkTransformerParameters(rules, options) {
   // Make sure provided options that override defaults are the correct types.
   // Make sure that custom user options are not checked - a user could add other option properties for their own rules.
   for (const key in defaultOptions) {
+    const actualType = typeof options?.[key];
     const expectedType = typeof defaultOptions[key];
-    if (options?.[key] !== undefined && typeof options[key] !== expectedType) {
+    // This keeps triggering when actualType is undefined??
+    if (actualType !== 'undefined' && actualType !== expectedType) {
       throw new Error(
-        `options.${key} is not ${expectedType}, but type ` +
-          typeof options[key],
+        `options.${key} is not ${expectedType}, but type ${actualType}`,
       );
     }
   }
 }
 
 /**
- * @param {rules} [rules] - An object that contains functions which correspond to keys on the input object and build up the output object. Each rule can take a single parameter of type object that can utilise the properties input, output, key, value, options. There are two special keys: _onStart and _onFinish. The former stores a function that runs before all other rules, but after the output._temp object has been created. The latter stores a function that runs after all other rules, but before the output._temp object has been deleted.
- * @param {options} [options] - An optional options object to change the default options. This gets passed to each function on the rules object.
- * @returns {transformerFunction} A function that takes an input object, runs the rules that build up the output object, and then returns the output object.
+ * The function returned by the transformer, which can be called with an input object and will run the rules with the options and produce an output object.
+ * @interface
+ * @param {StringKeyObj<any>} input
+ * @returns {StringKeyObj<any>} The transformed object.
  */
-export default function transformer(rules = {}, options = {}) {
-  // Throw errors if any of the parameters are bad.
+export interface TransformerFunction {
+  (input: StringKeyObj<any>): StringKeyObj<any>;
+}
+
+/**
+ * @param {Rules} [rules] - An object that contains functions which correspond to keys on the input object and build up the output object. Each rule can take a single parameter of type object that can utilise the properties input, output, key, value, options. There are two special keys: _onStart and _onFinish. The former stores a function that runs before all other rules, but after the output._temp object has been created. The latter stores a function that runs after all other rules, but before the output._temp object has been deleted.
+ * @param {Options} [options] - An optional options object to change the default options. This gets passed to each function on the rules object.
+ * @returns {TransformerFunction} A function that takes an input object, runs the rules that build up the output object, and then returns the output object.
+ */
+export default function transformer(
+  rules: Rules = {},
+  options: Options = {},
+): TransformerFunction {
+  // Throw errors if any of the user-provided parameters are bad.
   checkTransformerParameters(rules, options);
 
-  /** @type {options} */
-  const allOptions = {
+  // Default options have all the base options, and user-defined options have been
+  // checked to make sure defaults are not overwritten with undefined or null values.
+  const allOptions: Required<Options> = {
     ...defaultOptions,
     ...options,
   };
@@ -93,8 +90,7 @@ export default function transformer(rules = {}, options = {}) {
         'inputObj parameter is not an object, but a ' + typeof inputObj,
       );
 
-    /** @type {objAny} */
-    let outputObj = { _temp: {} };
+    let outputObj: StringKeyObj<any> = { _temp: {} };
 
     if (rules?._onStart) {
       rules._onStart({

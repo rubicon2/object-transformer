@@ -1,4 +1,4 @@
-import transformer, { copy, parseDate } from '../lib/index.mjs';
+import transformer, { copy, parseDate } from '../dist/index.mjs';
 import { describe, it, expect } from 'vitest';
 
 describe('README examples', () => {

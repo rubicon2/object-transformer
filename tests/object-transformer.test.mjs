@@ -1,4 +1,4 @@
-import transformer from '../lib/object-transformer.mjs';
+import transformer from '../dist/object-transformer.mjs';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('object-transformer', () => {
