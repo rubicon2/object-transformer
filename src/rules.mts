@@ -5,7 +5,6 @@ import type {
   RuleParams,
   Parser,
 } from './jsdoc.common.mjs';
-import { defaultOptions } from './jsdoc.common.mjs';
 import pathToNestedObj from 'path-to-nested-obj';
 import deepMerge from '@rubicon2/deep-merge';
 
@@ -62,7 +61,11 @@ function copy({
       ...options, // Rule-specific options.
     };
     let { pathSeparator, nestedOutputKeys, omitEmptyStrings } = allOptions;
-    if (!pathSeparator) pathSeparator = defaultOptions.pathSeparator;
+    // In case user has overriden path separator with null or undefined for some reason.
+    if (!pathSeparator)
+      throw new Error(
+        `options.pathSeparator is an invalid value: ${pathSeparator}. Should be a string`,
+      );
 
     if (typeof value === 'string' && value.length === 0 && omitEmptyStrings)
       return;
