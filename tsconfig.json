@@ -1,26 +1,15 @@
 {
-  "include": ["lib/*.mjs"],
-  "exclude": ["lib/*.d.mts"],
+  "include": ["src/*.ts", "src/*.mts"],
   "compilerOptions": {
-    "rootDir": "lib",
-    "outDir": "types",
-    // Only generating declarations for this js project.
-    "allowJs": true,
-    "checkJs": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "esModuleInterop": true,
+    "rootDir": "src",
+    "outDir": "dist",
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Recommended Options
+    "module": "node18",
+    "target": "es2020",
     "strict": true,
     "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true
+    "declaration": true,
+    "sourceMap": true,
+    "declarationMap": true
   }
 }

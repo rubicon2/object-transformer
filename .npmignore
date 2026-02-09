@@ -146,3 +146,5 @@ vite.config.ts.timestamp-*
 .prettierrc
 *.config.*
 package-lock.json
+
+src/
