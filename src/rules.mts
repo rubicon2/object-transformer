@@ -55,8 +55,8 @@ interface CopyParams {
 
 /**
  * Create a rule function that copies an input value, parses it with an optional parser, and then puts the result on the output object at a key path determined by the user-provided destinationKey. If there is no destinationKey it will copy to the same path as the input key.
- * @param {copyParams} params - The params object can include the optional properties: parser, destinationKey, conflictHandler, and options.
- * @returns {rule} Return a rule function for use on the rules object when initializing a transformer.
+ * @param {CopyParams} params - The params object can include the optional properties: parser, destinationKey, conflictHandler, and options.
+ * @returns {Rule} Return a rule function for use on the rules object when initializing a transformer.
  */
 function copy({
   parser = (v) => v,
