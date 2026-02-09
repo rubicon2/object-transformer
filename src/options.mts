@@ -1,4 +1,4 @@
-import type { StringKeyObj } from './jsdoc.common.mjs';
+import type { StringKeyObj } from './common.mjs';
 
 /**
  * Options which get passed to each rule. Can be overridden on a rule-by-rule basis, or ignored by the rule.

@@ -1,4 +1,4 @@
-import type { StringKeyObj } from './jsdoc.common.mjs';
+import type { StringKeyObj } from './common.mjs';
 import type { Rule } from './rules.mjs';
 import type { Options } from './options.mjs';
 import { defaultOptions } from './options.mjs';
