@@ -1,5 +1,5 @@
 /**
- * @interface
+ * Function signature for parsers, which should take a value of one type and turn it into another.
  * @param {*} value - Input value, of any type.
  * @returns {*} Output value, of any type.
  */
