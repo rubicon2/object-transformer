@@ -291,6 +291,8 @@ describe('object-transformer', () => {
 
       const t = transformer(rules, options);
       const output = t(input);
+      // Add _temp object to output so it matches what each rule would have been called with.
+      output._temp = {};
 
       expect(_onStart).toHaveBeenCalledTimes(1);
       expect(myKey).toHaveBeenCalledTimes(1);

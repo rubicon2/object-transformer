@@ -1,5 +1,5 @@
 import type { StringKeyObj } from './common.mjs';
-import type { Rule } from './rules.mjs';
+import type { Output, Rule } from './rules.mjs';
 import type { Options } from './options.mjs';
 import { defaultOptions } from './options.mjs';
 import valueFromNestedObj from 'value-from-nested-obj';
@@ -101,7 +101,7 @@ export default function transformer(
         'inputObj parameter is not an object, but a ' + typeof inputObj,
       );
 
-    let outputObj: StringKeyObj<any> = { _temp: {} };
+    let outputObj: Output = { _temp: {} };
 
     if (rules?._onStart) {
       rules._onStart({
@@ -164,8 +164,14 @@ export default function transformer(
       });
     }
 
-    // Delete _temp object right at the end after _onFinish runs, now we no longer need it.
-    delete outputObj._temp;
-    return outputObj;
+    // Copy values of every key across to final output, except _temp object.
+    // _temp is not optional on output passed to rule so user can't delete it.
+    const output: StringKeyObj<any> = {};
+    for (const key in outputObj) {
+      if (key === '_temp') continue;
+      else output[key] = outputObj[key];
+    }
+
+    return output;
   };
 }

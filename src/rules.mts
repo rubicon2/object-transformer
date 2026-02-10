@@ -4,6 +4,16 @@ import type { Parser } from './parsers.mjs';
 import pathToNestedObj from 'path-to-nested-obj';
 import deepMerge from '@rubicon2/deep-merge';
 
+export interface Output extends StringKeyObj<any> {
+  /**
+   * _temp stores an object which is instantiated before the _onStart rule
+   * and deleted after the _onFinish rule. This can be used to store values
+   * from one rule for use in another, or to collect data and put it together
+   * at the end in the _onFinish rule.
+   */
+  _temp: StringKeyObj<any>;
+}
+
 /**
  * An object which is passed from the transformer to each rule.
  */
@@ -15,7 +25,7 @@ export interface RuleParams {
   /**
    * The output object.
    */
-  output: StringKeyObj<any>;
+  output: Output;
   /**
    * The input key path.
    */
