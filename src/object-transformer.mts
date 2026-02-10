@@ -6,17 +6,22 @@ import valueFromNestedObj from 'value-from-nested-obj';
 
 /**
  * An object containing rule functions which correspond to keys to be processed on the input object.
- * The function corresponding to the _onStart key is run before all other rules, but after the _temp
- * object has been added to the output object, and the _onFinish function is run after all other rules,
- * but before the _temp object has been deleted.
- * @interface
  */
-export type Rules = StringKeyObj<Rule>;
+export interface Rules extends StringKeyObj<Rule | undefined> {
+  /**
+   * Runs before all other rules, but after the output._temp object has been created.
+   */
+  _onStart?: Rule;
+  /**
+   * Runs after all other rules, but before the output._temp object is deleted.
+   */
+  _onFinish?: Rule;
+}
 
 /**
  * Throw errors if the parameters or parameter properties are the wrong types.
- * @param {Rules} [rules] - The rules object to check.
- * @param {Options} [options] - The options object to check.
+ * @param {Rules} [rules] The rules object to check.
+ * @param {Options} [options] The options object to check.
  * @returns {void}
  */
 function checkTransformerParameters(rules: Rules, options: Options) {
@@ -58,9 +63,9 @@ function checkTransformerParameters(rules: Rules, options: Options) {
 }
 
 /**
- * The function returned by the transformer, which can be called with an input object and will run the rules with the options and produce an output object.
- * @interface
- * @param {StringKeyObj<any>} input
+ * A function returned by object transformer, which can be called with an input
+ * object and will run the rules with the options and produce an output object.
+ * @param {StringKeyObj<any>} input The input object you want to transform.
  * @returns {StringKeyObj<any>} The transformed object.
  */
 export interface TransformerFunction {
@@ -68,8 +73,9 @@ export interface TransformerFunction {
 }
 
 /**
- * @param {Rules} [rules] - An object that contains functions which correspond to keys on the input object and build up the output object. Each rule can take a single parameter of type object that can utilise the properties input, output, key, value, options. There are two special keys: _onStart and _onFinish. The former stores a function that runs before all other rules, but after the output._temp object has been created. The latter stores a function that runs after all other rules, but before the output._temp object has been deleted.
- * @param {Options} [options] - An optional options object to change the default options. This gets passed to each function on the rules object.
+ * Creates a transformer function with the provided rules and options.
+ * @param {Rules} [rules] An object that contains functions which correspond to keys on the input object and build up the output object. Each rule can take a single parameter of type object that can utilise the properties input, output, key, value, options. There are two special keys: _onStart and _onFinish. The former stores a function that runs before all other rules, but after the output._temp object has been created. The latter stores a function that runs after all other rules, but before the output._temp object has been deleted.
+ * @param {Options} [options] An optional options object to change the default options. This gets passed to each function on the rules object.
  * @returns {TransformerFunction} A function that takes an input object, runs the rules that build up the output object, and then returns the output object.
  */
 export default function transformer(
