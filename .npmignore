@@ -139,6 +139,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # Development stuffs.
+.vscode
 *.test.*
 .gitignore
 .npmignore
@@ -146,5 +147,7 @@ vite.config.ts.timestamp-*
 .prettierrc
 *.config.*
 package-lock.json
+tsconfig.json
 
 src/
+tests/
