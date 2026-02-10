@@ -1,4 +1,4 @@
-import transformer, { copy, parseDate } from './index';
+import transformer, { copy, parseDate } from '../dist/index.mjs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 let outputObj;

@@ -1,11 +1,15 @@
 {
   "name": "@rubicon2/object-transformer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Turn one object into a differently formatted object, via user-defined rules",
-  "main": "index.js",
   "type": "module",
+  "main": "dist/index.mjs",
+  "typings": "dist/index.d.mts",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "build": "rm -rf dist && npx tsc",
+    "build:watch": "rm -rf dist && npx tsc --watch",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -35,11 +39,12 @@
     "eslint-plugin-jsdoc": "^61.1.2",
     "globals": "^16.4.0",
     "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@rubicon2/deep-merge": "^1.1.1",
-    "path-to-nested-obj": "^1.0.0",
-    "value-from-nested-obj": "^1.1.0"
+    "@rubicon2/deep-merge": "^1.2.0",
+    "path-to-nested-obj": "^1.1.0",
+    "value-from-nested-obj": "^1.2.1"
   }
 }

@@ -1,4 +1,4 @@
-import transformer from './object-transformer.mjs';
+import transformer from '../dist/object-transformer.mjs';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('object-transformer', () => {
@@ -82,6 +82,62 @@ describe('object-transformer', () => {
         expect(() => transformer(null, options)).toThrowError(
           'options parameter is not an object, but a' + parameterType,
         );
+      },
+    );
+
+    it.each([
+      {
+        options: {
+          nestedInputKeys: 'some string',
+        },
+        expectedMsg: 'options.nestedInputKeys is not boolean, but type string',
+      },
+      {
+        options: {
+          nestedInputKeys: 97,
+        },
+        expectedMsg: 'options.nestedInputKeys is not boolean, but type number',
+      },
+      {
+        options: {
+          nestedOutputKeys: 'some string',
+        },
+        expectedMsg: 'options.nestedOutputKeys is not boolean, but type string',
+      },
+      {
+        options: {
+          nestedOutputKeys: 97,
+        },
+        expectedMsg: 'options.nestedOutputKeys is not boolean, but type number',
+      },
+      {
+        options: {
+          omitEmptyStrings: 'some string',
+        },
+        expectedMsg: 'options.omitEmptyStrings is not boolean, but type string',
+      },
+      {
+        options: {
+          omitEmptyStrings: 97,
+        },
+        expectedMsg: 'options.omitEmptyStrings is not boolean, but type number',
+      },
+      {
+        options: {
+          omitRulelessKeys: 'some string',
+        },
+        expectedMsg: 'options.omitRulelessKeys is not boolean, but type string',
+      },
+      {
+        options: {
+          omitRulelessKeys: 97,
+        },
+        expectedMsg: 'options.omitRulelessKeys is not boolean, but type number',
+      },
+    ])(
+      'throws an error with a useful message if $expectedMsg',
+      ({ options, expectedMsg }) => {
+        expect(() => transformer(null, options)).toThrowError(expectedMsg);
       },
     );
 
@@ -235,12 +291,20 @@ describe('object-transformer', () => {
 
       const t = transformer(rules, options);
       const output = t(input);
+      // Add _temp object to output so it matches what each rule would have been called with.
+      output._temp = {};
 
       expect(_onStart).toHaveBeenCalledTimes(1);
       expect(myKey).toHaveBeenCalledTimes(1);
       expect(_onFinish).toHaveBeenCalledTimes(1);
 
-      expect(_onStart).toHaveBeenLastCalledWith({ output, input, options });
+      expect(_onStart).toHaveBeenLastCalledWith({
+        input,
+        output,
+        key: '_onStart',
+        value: undefined,
+        options,
+      });
       expect(myKey).toHaveBeenLastCalledWith({
         input,
         output,
@@ -249,8 +313,10 @@ describe('object-transformer', () => {
         options,
       });
       expect(_onFinish).toHaveBeenLastCalledWith({
-        output,
         input,
+        output,
+        key: '_onFinish',
+        value: undefined,
         options,
       });
     });
@@ -412,6 +478,8 @@ describe('object-transformer', () => {
       expect(_onStartParams).toStrictEqual({
         input: inputObj,
         output: { _temp: {} },
+        key: '_onStart',
+        value: undefined,
         options,
       });
 
@@ -428,6 +496,8 @@ describe('object-transformer', () => {
       expect(_onFinishParams).toStrictEqual({
         input: inputObj,
         output: { myKey: 'my value', _temp: { _onStart: 'saved to temp' } },
+        key: '_onFinish',
+        value: undefined,
         options,
       });
     });

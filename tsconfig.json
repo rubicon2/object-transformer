@@ -1,0 +1,15 @@
+{
+  "include": ["src/*.ts", "src/*.mts"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "module": "node18",
+    "target": "es2020",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "sourceMap": true,
+    "declarationMap": true
+  }
+}
