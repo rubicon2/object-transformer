@@ -62,7 +62,7 @@ export interface ConflictHandler {
 /**
  * An object passed to copy in order to set up the returned function.
  */
-interface CopyParams {
+export interface CopyParams {
   /**
    * Optional function to process the input value before assigning to the
    * output key. Can also be used to construct an object for the value to
