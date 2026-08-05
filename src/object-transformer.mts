@@ -7,7 +7,7 @@ import valueFromNestedObj from 'value-from-nested-obj';
 /**
  * An object containing rule functions which correspond to keys to be processed on the input object.
  */
-export interface Rules extends StringKeyObj<Rule | undefined> {
+export interface Rules extends Record<string, Rule | undefined> {
   /**
    * Runs before all other rules, but after the output._temp object has been created.
    */
