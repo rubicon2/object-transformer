@@ -10,11 +10,11 @@ export interface Rules extends Record<string, Rule | undefined> {
   /**
    * Runs before all other rules, but after the output._temp object has been created.
    */
-  _onStart?: Rule;
+  _onStart?: Rule | undefined;
   /**
    * Runs after all other rules, but before the output._temp object is deleted.
    */
-  _onFinish?: Rule;
+  _onFinish?: Rule | undefined;
 }
 
 /**
