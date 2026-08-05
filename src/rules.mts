@@ -36,8 +36,10 @@ export interface RuleParams {
   value: any;
   /**
    * The options object as determined when the transformer function was instantiated.
+   * Since transformer will include basic options, Required<Options> type is used.
+   * We know the basic options will be included.
    */
-  options: Options;
+  options: Required<Options>;
 }
 
 /**
@@ -116,11 +118,11 @@ function copy({
   }: RuleParams) => {
     // Merge options provided in arguments, with local overrides which are
     // provided and locked in when this anonymous function is instantiated.
-    const allOptions: Options = {
+    const allOptions = {
       ...transformerOptions, // Transformer-wide options.
       ...options, // Rule-specific options.
     };
-    let { pathSeparator, nestedOutputKeys, omitEmptyStrings } = allOptions;
+    const { pathSeparator, nestedOutputKeys, omitEmptyStrings } = allOptions;
     // In case user has overriden path separator with null or undefined for some reason.
     if (!pathSeparator)
       throw new Error(
