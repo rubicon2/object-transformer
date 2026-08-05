@@ -69,7 +69,7 @@ export interface CopyParams {
    * output key. Can also be used to construct an object for the value to
    * reside in, before being assigned to the output key.
    */
-  parser?: Parser;
+  parser?: Parser<any, any>;
   /**
    * The key path on the output object which will contain the value
    * once it has been processed by the parser. This can be a nested

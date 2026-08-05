@@ -3,8 +3,8 @@
  * @param {*} value - Input value, of any type.
  * @returns {*} Output value, of any type.
  */
-export interface Parser {
-  (value: any): any;
+export interface Parser<I, O> {
+  (value: I): O;
 }
 
 // Match format of parseFloat, parseInt, etc.
@@ -14,7 +14,7 @@ export interface Parser {
  * @param {string} str - A date in string format.
  * @returns {Date} A Date object created from the input string.
  */
-const parseDate: Parser = function (str: string): Date {
+const parseDate: Parser<string, Date> = function (str: string): Date {
   return new Date(str);
 };
 
