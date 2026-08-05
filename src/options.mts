@@ -1,7 +1,7 @@
 /**
  * An object containing options which get passed to each rule. Can be overridden on a rule-by-rule basis.
  */
-export interface Options extends Record<string, unknown> {
+export interface Options extends Record<string, any> {
   /**
    * Whether keys with no user-defined rule should be copied over to the output or ignored. Defaults to false.
    */
