@@ -6,15 +6,15 @@ import valueFromNestedObj from 'value-from-nested-obj';
 /**
  * An object containing rule functions which correspond to keys to be processed on the input object.
  */
-export interface Rules extends Record<string, Rule | undefined> {
+export interface Rules extends Record<string, Rule | null | undefined> {
   /**
    * Runs before all other rules, but after the output._temp object has been created.
    */
-  _onStart?: Rule | undefined;
+  _onStart?: Rule | null | undefined;
   /**
    * Runs after all other rules, but before the output._temp object is deleted.
    */
-  _onFinish?: Rule | undefined;
+  _onFinish?: Rule | null | undefined;
 }
 
 /**
