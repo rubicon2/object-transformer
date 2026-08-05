@@ -1,4 +1,3 @@
-import type { StringKeyObj } from './common.mjs';
 import type { Output, Rule } from './rules.mjs';
 import type { Options } from './options.mjs';
 import { defaultOptions } from './options.mjs';
@@ -65,11 +64,11 @@ function checkTransformerParameters(rules: Rules, options: Options) {
 /**
  * A function returned by object transformer, which can be called with an input
  * object and will run the rules with the options and produce an output object.
- * @param {StringKeyObj<any>} input The input object you want to transform.
- * @returns {StringKeyObj<any>} The transformed object.
+ * @param {Record<string, any>} input The input object you want to transform.
+ * @returns {Record<string, any>} The transformed object.
  */
 export interface TransformerFunction {
-  (input: StringKeyObj<any>): StringKeyObj<any>;
+  (input: Record<string, any>): Record<string, any>;
 }
 
 /**
@@ -166,7 +165,7 @@ export default function transformer(
 
     // Copy values of every key across to final output, except _temp object.
     // _temp is not optional on output passed to rule so user can't delete it.
-    const output: StringKeyObj<any> = {};
+    const output: Record<string, any> = {};
     for (const key in outputObj) {
       if (key === '_temp') continue;
       else output[key] = outputObj[key];
