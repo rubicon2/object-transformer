@@ -1,17 +1,16 @@
-import type { StringKeyObj } from './common.mjs';
 import type { Options } from './options.mjs';
 import type { Parser } from './parsers.mjs';
 import pathToNestedObj from 'path-to-nested-obj';
 import deepMerge from '@rubicon2/deep-merge';
 
-export interface Output extends StringKeyObj<any> {
+export interface Output extends Record<string, any> {
   /**
    * _temp stores an object which is instantiated before the _onStart rule
    * and deleted after the _onFinish rule. This can be used to store values
    * from one rule for use in another, or to collect data and put it together
    * at the end in the _onFinish rule.
    */
-  _temp: StringKeyObj<any>;
+  _temp: Record<string, any>;
 }
 
 /**
@@ -21,7 +20,7 @@ export interface RuleParams {
   /**
    * The input object.
    */
-  input: StringKeyObj<any>;
+  input: Record<string, any>;
   /**
    * The output object.
    */
@@ -133,7 +132,7 @@ function copy({
       return;
 
     if (nestedOutputKeys) {
-      const obj: StringKeyObj<any> = pathToNestedObj(
+      const obj: Record<string, any> = pathToNestedObj(
         destinationKey || inputKey,
         pathSeparator,
         parser(value),
