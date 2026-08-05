@@ -1,6 +1,6 @@
 import type { Rule, Rules } from '../dist/index.mjs';
 
-import transformer from '../dist/object-transformer.mjs';
+import transformer from '../dist/index.mjs';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('object-transformer', () => {

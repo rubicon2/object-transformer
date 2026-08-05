@@ -1,16 +1,7 @@
-import * as parsers from '../dist/parsers.mjs';
+import { parseDate } from '../dist/index.mjs';
 import { describe, it, expect } from 'vitest';
 
 describe('parsers', () => {
-  it.each(
-    Object.entries(parsers).map(([name, fn]) => ({
-      name,
-      fn,
-    })),
-  )('$name parser should be of type function', ({ fn }) => {
-    expect(typeof fn).toBe('function');
-  });
-
   describe('parseDate', () => {
     it.each([
       {
@@ -24,7 +15,7 @@ describe('parsers', () => {
     ])(
       'given a parameter of a date formatted as a string, should return a date object with the same date',
       ({ input, expectedOutput }) => {
-        expect(parsers.parseDate(input)).toStrictEqual(expectedOutput);
+        expect(parseDate(input)).toStrictEqual(expectedOutput);
       },
     );
   });
