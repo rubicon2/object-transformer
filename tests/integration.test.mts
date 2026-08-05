@@ -1,3 +1,5 @@
+import type { Options, Rule, Rules } from '../dist/index.mjs';
+
 import transformer, { copy, parseDate } from '../dist/index.mjs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -15,7 +17,12 @@ describe('object-transformer', () => {
       key2: '97',
     };
 
-    const rules = {
+    interface MyRules extends Rules {
+      key1: Rule;
+      key2: Rule;
+    }
+
+    const rules: MyRules = {
       key1: ({ output, key, value }) => (output[key] = value + ' string'),
       key2: ({ output, key, value }) => (output[key] = parseInt(value)),
     };
@@ -34,7 +41,11 @@ describe('object-transformer', () => {
       originalKey: '97',
     };
 
-    const rules = {
+    interface MyRules extends Rules {
+      originalKey: Rule;
+    }
+
+    const rules: MyRules = {
       originalKey: ({ output, value }) => (output.newKey = parseInt(value)),
     };
 
@@ -51,7 +62,11 @@ describe('object-transformer', () => {
       myKey: '1997',
     };
 
-    const rules = {
+    interface MyRules extends Rules {
+      myKey: Rule;
+    }
+
+    const rules: MyRules = {
       myKey: ({ output, key, value }) =>
         (output[key] = { a: { b: parseInt(value) } }),
     };
@@ -69,7 +84,15 @@ describe('object-transformer', () => {
   });
 
   it('Re-implement url-query-to-prisma default find ruleset', () => {
-    const prismaFindRules = {
+    interface PrismaFindRules extends Rules {
+      take: Rule;
+      skip: Rule;
+      cursor: Rule;
+      orderBy: Rule;
+      sortOrder: Rule;
+    }
+
+    const prismaFindRules: PrismaFindRules = {
       take: copy({ parser: parseInt }),
       skip: copy({ parser: parseInt }),
       cursor: copy({ destinationKey: 'cursor.id', parser: parseInt }),
@@ -84,7 +107,7 @@ describe('object-transformer', () => {
           : [sortOrder];
 
         // The default value of each orderBy will be 'asc'!
-        const orderByObj = {};
+        const orderByObj: Record<string, unknown> = {};
         for (const orderByItem of orderByArray) {
           orderByObj[orderByItem] = 'asc';
         }
@@ -131,7 +154,14 @@ describe('object-transformer', () => {
   });
 
   it('Re-implement url-query-to-prisma usage example', () => {
-    const rules = {
+    interface MyRules extends Rules {
+      title: Rule;
+      author: Rule;
+      fromDate: Rule;
+      toDate: Rule;
+    }
+
+    const rules: MyRules = {
       title: copy({
         destinationKey: 'where.title',
         parser: (value) => ({ contains: value, mode: 'insensitive' }),
@@ -150,7 +180,7 @@ describe('object-transformer', () => {
       }),
     };
 
-    const options = {
+    const options: Options = {
       omitRulelessKeys: true,
       omitEmptyStrings: true,
     };
