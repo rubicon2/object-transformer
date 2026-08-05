@@ -1,3 +1,5 @@
+import type { Rule, Rules } from '../dist/index.mjs';
+
 import transformer from '../dist/object-transformer.mjs';
 import { describe, it, expect, vi } from 'vitest';
 
@@ -16,6 +18,7 @@ describe('object-transformer', () => {
     });
 
     it('works even if the user provides a null rules object', () => {
+      // @ts-expect-error -- testing incorrect argument type.
       const t = transformer(null);
       const outputObj = t({});
       expect(outputObj).toStrictEqual({});
@@ -37,6 +40,7 @@ describe('object-transformer', () => {
     ])(
       'gives a useful error message if the type of rules parameter is not object, but type $parameterType',
       ({ rules, parameterType }) => {
+        // @ts-expect-error -- testing incorrect argument type.
         expect(() => transformer(rules)).toThrowError(
           'rules parameter is not an object, but a' + parameterType,
         );
@@ -58,6 +62,7 @@ describe('object-transformer', () => {
     });
 
     it('works even if the user provides a null options object', () => {
+      // @ts-expect-error -- testing incorrect argument type.
       const t = transformer({}, null);
       const outputObj = t({});
       expect(outputObj).toStrictEqual({});
@@ -79,6 +84,7 @@ describe('object-transformer', () => {
     ])(
       'gives a useful error message if the options parameter is not an object, but type $parameterType',
       ({ options, parameterType }) => {
+        // @ts-expect-error -- testing incorrect argument type.
         expect(() => transformer(null, options)).toThrowError(
           'options parameter is not an object, but a' + parameterType,
         );
@@ -137,6 +143,7 @@ describe('object-transformer', () => {
     ])(
       'throws an error with a useful message if $expectedMsg',
       ({ options, expectedMsg }) => {
+        // @ts-expect-error -- testing incorrect argument type.
         expect(() => transformer(null, options)).toThrowError(expectedMsg);
       },
     );
@@ -147,7 +154,11 @@ describe('object-transformer', () => {
         keyToIgnore: 2,
       };
 
-      const rules = {
+      interface MyRules extends Rules {
+        keyToKeep: Rule;
+      }
+
+      const rules: MyRules = {
         keyToKeep: ({ output, key, value }) => (output[key] = value),
       };
 
@@ -169,7 +180,7 @@ describe('object-transformer', () => {
         keyToIgnore: '',
       };
 
-      const ignoreEmptyRule = ({ output, key, value, options }) => {
+      const ignoreEmptyRule: Rule = ({ output, key, value, options }) => {
         if (
           typeof value === 'string' &&
           value.length === 0 &&
@@ -227,7 +238,7 @@ describe('object-transformer', () => {
             },
           };
 
-          const rules = {
+          const rules: Rules = {
             [path]: ({ output, key, value }) => (output[key] = value),
           };
 
@@ -250,7 +261,7 @@ describe('object-transformer', () => {
           'my.input.path': 'my flat value',
         };
 
-        const rules = {
+        const rules: Rules = {
           'my.input.path': ({ output, key, value }) => (output[key] = value),
         };
 
@@ -271,7 +282,7 @@ describe('object-transformer', () => {
       const myKey = vi.fn(({ output, key, value }) => (output[key] = value));
       const _onFinish = vi.fn();
 
-      const rules = {
+      const rules: Rules = {
         _onStart,
         myKey,
         _onFinish,
@@ -336,7 +347,9 @@ describe('object-transformer', () => {
     describe('inputObj parameter', () => {
       it('throws an error if the user calls the transformer function without an input object parameter', () => {
         const t = transformer();
+        // @ts-expect-error -- testing incorrect parameter type.
         expect(() => t()).toThrowError('No input object provided');
+        // @ts-expect-error -- testing incorrect argument type.
         expect(() => t(null)).toThrowError('No input object provided');
       });
 
@@ -357,6 +370,7 @@ describe('object-transformer', () => {
         'gives a useful error message if the type of inputObj parameter is not object, but type $parameterType',
         ({ inputObj, parameterType }) => {
           const t = transformer();
+          // @ts-expect-error -- testing incorrect parameter type.
           expect(() => t(inputObj)).toThrowError(
             'inputObj parameter is not an object, but a' + parameterType,
           );
@@ -417,7 +431,7 @@ describe('object-transformer', () => {
     ])(
       'can retrieve values from nested objects with key paths',
       ({ inputObj, sourceKey, destinationKey, expectedOutput }) => {
-        const rules = {
+        const rules: Rules = {
           [sourceKey]: ({ output, key, value }) =>
             (output[destinationKey || key] = value),
         };
@@ -450,7 +464,7 @@ describe('object-transformer', () => {
         (params) => (_onFinishParams = structuredClone(params)),
       );
 
-      const rules = {
+      const rules: Rules = {
         _onStart,
         myKey,
         _onFinish,
@@ -507,7 +521,7 @@ describe('object-transformer', () => {
       const myKey = vi.fn();
       const _onFinish = vi.fn();
 
-      const rules = {
+      const rules: Rules = {
         _onStart,
         myKey,
         _onFinish,
@@ -529,7 +543,7 @@ describe('object-transformer', () => {
       const myKey = vi.fn();
       const _onFinish = vi.fn();
 
-      const rules = {
+      const rules: Rules = {
         _onStart,
         myKey,
         _onFinish,
@@ -562,7 +576,7 @@ describe('object-transformer', () => {
         key2: 'A totally normal string',
       };
 
-      const rules = {
+      const rules: Rules = {
         key3: ({ output, key, value }) => (output[key] = value),
       };
 
@@ -596,7 +610,7 @@ describe('object-transformer', () => {
         mainChars: ['Cloud', 'Squall', 'Zidane'],
       };
 
-      const rules = {
+      const rules: Rules = {
         titles: ({ output, value }) => {
           output._temp.titles = [...value];
         },
@@ -651,7 +665,7 @@ describe('object-transformer', () => {
         someKey: 'Whatever, man',
       };
 
-      const rules = {
+      const rules: Rules = {
         _onStart: ({ output, input }) => {
           output.meta = {};
           output.meta.fieldCount = Array.from(Object.keys(input)).length;
@@ -697,7 +711,7 @@ describe('object-transformer', () => {
           'This will be stored in obj.temp, then used by _end, then removed before assertion checks.',
       };
 
-      const rules = {
+      const rules: Rules = {
         someKey: ({ output, key, value }) => (output._temp[key] = value),
         _onFinish: ({ output }) => {
           output.result = output._temp.someKey;
