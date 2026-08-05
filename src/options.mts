@@ -1,9 +1,7 @@
-import type { StringKeyObj } from './common.mjs';
-
 /**
  * An object containing options which get passed to each rule. Can be overridden on a rule-by-rule basis.
  */
-export interface Options extends StringKeyObj<any> {
+export interface Options extends Record<string, unknown> {
   /**
    * Whether keys with no user-defined rule should be copied over to the output or ignored. Defaults to false.
    */
