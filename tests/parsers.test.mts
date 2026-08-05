@@ -3,9 +3,9 @@ import { describe, it, expect } from 'vitest';
 
 describe('parsers', () => {
   it.each(
-    Object.keys(parsers).map((key) => ({
-      name: key,
-      fn: parsers[key],
+    Object.entries(parsers).map(([name, fn]) => ({
+      name,
+      fn,
     })),
   )('$name parser should be of type function', ({ fn }) => {
     expect(typeof fn).toBe('function');
