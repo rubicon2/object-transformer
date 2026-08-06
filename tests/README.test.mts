@@ -1,9 +1,11 @@
+import type { Rule, Rules } from '../dist/index.mjs';
+
 import transformer, { copy, parseDate } from '../dist/index.mjs';
 import { describe, it, expect } from 'vitest';
 
 describe('README examples', () => {
   it('usage', () => {
-    const rules = {
+    const rules: Rules = {
       'user.age': copy({ key: 'where.age', parser: parseInt }),
       'date.from': copy({ key: 'where.date.gte', parser: parseDate }),
       'date.to': copy({ key: 'where.date.lte', parser: parseDate }),
@@ -67,14 +69,14 @@ describe('README examples', () => {
 
   it('writing a custom rule', () => {
     // This just copies the value from the input object onto the output object.
-    const myCustomRule = ({ output, key, value }) => {
+    const myCustomRule: Rule = ({ output, key, value }) => {
       // Do not re-assign output itself like below - this will lose the reference to the original object.
       // output = { ...output, [key]: value }
       // But this is ok!
       output[key] = value;
     };
 
-    const rules = {
+    const rules: Rules = {
       key1: myCustomRule,
       key2: myCustomRule,
     };
@@ -90,14 +92,15 @@ describe('README examples', () => {
 
   it('writing a curried rule function', () => {
     // This copies the value from the input object and puts it on a different key on the output object.
-    const copyToDifferentPath = (outputKey) => {
+    const copyToDifferentPath = (outputKey: string) => {
       // Don't need input key or options, so don't bother destructuring them.
-      return ({ output, value }) => {
+      const rule: Rule = ({ output, value }) => {
         output[outputKey] = value;
       };
+      return rule;
     };
 
-    const rules = {
+    const rules: Rules = {
       inputA: copyToDifferentPath('outputA'),
       inputB: copyToDifferentPath('outputB'),
     };
