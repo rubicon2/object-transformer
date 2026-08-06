@@ -49,6 +49,20 @@ export interface Rule {
 }
 
 /**
+ * An object containing rule functions which correspond to keys to be processed on the input object.
+ */
+export interface Rules extends Record<string, Rule | null | undefined> {
+  /**
+   * Runs before all other rules, but after the output._temp object has been created.
+   */
+  _onStart?: Rule | null | undefined;
+  /**
+   * Runs after all other rules, but before the output._temp object is deleted.
+   */
+  _onFinish?: Rule | null | undefined;
+}
+
+/**
  * The function signature for a conflict handler function.
  * These functions are used to decide whether a or b (or both) should be used on the
  * output object, based on whatever arbitrary conditions are programmed into the function.

@@ -1,7 +1,7 @@
-export type { Rules } from './object-transformer.mjs';
 export type {
   Output,
   Rule,
+  Rules,
   RuleParams,
   ConflictHandler,
   CopyParams,
